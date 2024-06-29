@@ -1,3 +1,6 @@
 export default {
-  test: {testTimeout: 60_000},
+  test: {
+    watch: false,
+    testTimeout: 60_000,
+  },
 }
