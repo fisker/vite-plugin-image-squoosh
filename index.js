@@ -1,38 +1,55 @@
 import assert from 'node:assert/strict'
-import {isSupporttedImage, squooshImages} from './squoosh.js'
+import {isSupportedImage, squooshImages} from './squoosh.js'
+import optimizeSvg from './svgo.js'
+
+async function minifyWithSquoosh(bundle) {
+  /** @type {import('vite').Rollup.OutputAsset[]} */
+  const images = Object.values(bundle).filter(
+    (assetOrChunk) =>
+      assetOrChunk.type === 'asset' && isSupportedImage(assetOrChunk.fileName),
+  )
+
+  if (images.length === 0) {
+    return
+  }
+
+  const compressed = await squooshImages(
+    images.map((image) => ({content: image.source, name: image.fileName})),
+  )
+
+  for (const [index, image] of images.entries()) {
+    bundle[image.fileName].source = compressed[index]
+  }
+}
+
+async function minifySvg(bundle) {
+  /** @type {import('vite').Rollup.OutputAsset[]} */
+  const images = Object.values(bundle).filter(
+    (assetOrChunk) =>
+      assetOrChunk.type === 'asset' && /\.svg$/i.test(assetOrChunk.fileName),
+  )
+
+  for (const {fileName: name, source: content} of images) {
+    bundle[name].source = optimizeSvg(content)
+  }
+}
 
 /**
  * @type {import('vite').Plugin}
  */
-const vitePluginImageSquoosh = {
-  name: 'vite-plugin-image-squoosh',
+const vitePluginImageMinify = {
+  name: 'vite-plugin-image-minify',
   apply: 'build',
   async generateBundle(_options, bundle) {
-    /** @type {import('vite').Rollup.OutputAsset[]} */
-    const images = Object.entries(bundle)
-      .filter(([fileName, assetOrChunk]) => {
-        assert.equal(fileName, assetOrChunk.fileName, 'Unexpected asset')
-        return (
-          assetOrChunk.type === 'asset' &&
-          isSupporttedImage(assetOrChunk.fileName)
-        )
-      })
-      .map(([, image]) => image)
-
-    if (images.length === 0) {
-      return
+    for (const [fileName, assetOrChunk] of Object.entries(bundle)) {
+      assert.equal(fileName, assetOrChunk.fileName, 'Unexpected asset')
     }
 
-    const compressed = await squooshImages(
-      images.map((image) => ({content: image.source, name: image.fileName})),
-    )
-
-    for (const [index, image] of images.entries()) {
-      bundle[image.fileName].source = compressed[index]
-    }
+    await minifyWithSquoosh(bundle)
+    await minifySvg(bundle)
   },
 }
 
-const createVitePluginImageSquoosh = () => vitePluginImageSquoosh
+const createVitePluginImageMinify = () => vitePluginImageMinify
 
-export default createVitePluginImageSquoosh
+export default createVitePluginImageMinify

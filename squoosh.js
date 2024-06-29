@@ -64,6 +64,6 @@ async function squooshImages(files) {
   return result
 }
 
-const isSupporttedImage = (filename) => Boolean(getEncoder(filename))
+const isSupportedImage = (filename) => Boolean(getEncoder(filename))
 
-export {squooshImages, isSupporttedImage}
+export {squooshImages, isSupportedImage}

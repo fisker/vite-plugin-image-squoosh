@@ -4,6 +4,20 @@ exports[`Main 1`] = `
 [
   {
     "bundled": {
+      "name": "assets/car-lite-okg-C77L.svg",
+      "size": "12.9 kB (12907)",
+    },
+    "original": {
+      "name": "car-lite.svg",
+      "size": "26.5 kB (26539)",
+    },
+    "saved": {
+      "percentage": "-51.37%",
+      "size": "-13.6 kB (-13632)",
+    },
+  },
+  {
+    "bundled": {
       "name": "assets/demo-artwork-SS7dJ2TE.jpg",
       "size": "390 kB (390312)",
     },
