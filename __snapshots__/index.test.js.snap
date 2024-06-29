@@ -4,20 +4,6 @@ exports[`Main 1`] = `
 [
   {
     "bundled": {
-      "name": "assets/demo-device-screen-CcBXoMsE.png",
-      "size": "1.42 MB (1421280)",
-    },
-    "original": {
-      "name": "demo-device-screen.png",
-      "size": "1.62 MB (1622142)",
-    },
-    "saved": {
-      "percentage": "-12.38%",
-      "size": "-201 kB (-200862)",
-    },
-  },
-  {
-    "bundled": {
       "name": "assets/demo-artwork-SS7dJ2TE.jpg",
       "size": "390 kB (390312)",
     },
@@ -28,6 +14,20 @@ exports[`Main 1`] = `
     "saved": {
       "percentage": "-86.64%",
       "size": "-2.53 MB (-2532227)",
+    },
+  },
+  {
+    "bundled": {
+      "name": "assets/demo-device-screen-CcBXoMsE.png",
+      "size": "1.42 MB (1421280)",
+    },
+    "original": {
+      "name": "demo-device-screen.png",
+      "size": "1.62 MB (1622142)",
+    },
+    "saved": {
+      "percentage": "-12.38%",
+      "size": "-201 kB (-200862)",
     },
   },
   {

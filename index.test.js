@@ -15,12 +15,15 @@ async function runVite() {
     configFile: false,
     envFile: false,
     write: false,
+    logLevel: 'warn',
     plugins: [vitePluginImageSquoosh()],
   })
 
-  const assets = buildResult.output.filter(
-    (assetOrChunk) => assetOrChunk.type === 'asset' && assetOrChunk.name,
-  )
+  const assets = buildResult.output
+    .filter(
+      (assetOrChunk) => assetOrChunk.type === 'asset' && assetOrChunk.name,
+    )
+    .sort((imageA, imageB) => imageA.name.localeCompare(imageB.name))
 
   const result = await Promise.all(
     assets.map(async (asset) => {
