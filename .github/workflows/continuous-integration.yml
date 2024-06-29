@@ -49,7 +49,7 @@ jobs:
 
       - name: Run Test
         run: yarn test-coverage
-          
+
       - name: Coveralls
         uses: coverallsapp/github-action@v2
 
