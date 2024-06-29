@@ -1,23 +1,5 @@
-import module from 'node:module'
 import * as path from 'node:path'
-import url from 'node:url'
 import os from 'node:os'
-import fs from 'node:fs/promises'
-
-const LIB_SQUOOSH_HACK_CODE = 'var fetch;'
-
-async function importLibrarySquoosh() {
-  const libsquooshEntry = module
-    .createRequire(import.meta.url)
-    .resolve('@frostoven/libsquoosh')
-  const content = await fs.readFile(libsquooshEntry, 'utf8')
-
-  if (!content.startsWith(LIB_SQUOOSH_HACK_CODE)) {
-    await fs.writeFile(libsquooshEntry, LIB_SQUOOSH_HACK_CODE + content)
-  }
-
-  return import(url.pathToFileURL(libsquooshEntry).href)
-}
 
 const encoders = new Map([
   ['.jpg', 'mozjpeg'],
@@ -38,7 +20,7 @@ async function squooshImages(files) {
     return []
   }
 
-  const {ImagePool} = await importLibrarySquoosh()
+  const {ImagePool} = await import('@frostoven/libsquoosh')
   const imagePool = new ImagePool(os.cpus().length)
 
   let result
