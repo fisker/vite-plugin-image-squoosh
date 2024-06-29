@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Main 1`] = `
+[
+  {
+    "bundled": {
+      "name": "assets/demo-device-screen-CcBXoMsE.png",
+      "size": "1.42 MB (1421280)",
+    },
+    "original": {
+      "name": "demo-device-screen.png",
+      "size": "1.62 MB (1622142)",
+    },
+    "saved": {
+      "percentage": "-12.38%",
+      "size": "-201 kB (-200862)",
+    },
+  },
+  {
+    "bundled": {
+      "name": "assets/demo-artwork-SS7dJ2TE.jpg",
+      "size": "390 kB (390312)",
+    },
+    "original": {
+      "name": "demo-artwork.jpg",
+      "size": "2.92 MB (2922539)",
+    },
+    "saved": {
+      "percentage": "-86.64%",
+      "size": "-2.53 MB (-2532227)",
+    },
+  },
+  {
+    "bundled": {
+      "name": "assets/demo-large-photo-DuXcsXKK.jpg",
+      "size": "862 kB (862478)",
+    },
+    "original": {
+      "name": "demo-large-photo.jpg",
+      "size": "2.79 MB (2790013)",
+    },
+    "saved": {
+      "percentage": "-69.09%",
+      "size": "-1.93 MB (-1927535)",
+    },
+  },
+]
+`;
