@@ -19,7 +19,8 @@
   "exports": "./index.js",
   "files": [
     "index.js",
-    "squoosh.js"
+    "squoosh.js",
+    "svgo.js"
   ],
   "scripts": {
     "clean": "run-p \"clean:*\"",
@@ -39,10 +40,11 @@
     "prepare": "husky",
     "test": "vitest",
     "test-coverage": "vitest --coverage",
-    "release": "runs-s lint test dist"
+    "release": "run-s lint test dist"
   },
   "dependencies": {
-    "@frostoven/libsquoosh": "^0.4.8"
+    "@frostoven/libsquoosh": "^0.4.8",
+    "svgo": "^3.3.2"
   },
   "devDependencies": {
     "@fisker/eslint-config": "13.1.0",
