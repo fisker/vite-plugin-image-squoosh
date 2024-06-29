@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-image-minify",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Vite plugin to minify images.",
   "homepage": "https://github.com/fisker/vite-plugin-image-minify#readme",
   "bugs": {
