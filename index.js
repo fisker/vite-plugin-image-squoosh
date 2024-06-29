@@ -5,7 +5,7 @@ import {isSupporttedImage, squooshImages} from './squoosh.js'
  * @type {import('vite').Plugin}
  */
 const vitePluginImageSquoosh = {
-  name: 'vite-plugin-image-squoosh',
+  name: 'vite-plugin-image-minify',
   apply: 'build',
   async generateBundle(_options, bundle) {
     /** @type {import('vite').Rollup.OutputAsset[]} */

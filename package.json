@@ -1,13 +1,13 @@
 {
-  "name": "vite-plugin-image-squoosh",
+  "name": "vite-plugin-image-minify",
   "version": "0.0.1",
-  "description": "Vite plugin to run squoosh on images.",
-  "homepage": "https://github.com/fisker/vite-plugin-image-squoosh#readme",
+  "description": "Vite plugin to minify images.",
+  "homepage": "https://github.com/fisker/vite-plugin-image-minify#readme",
   "bugs": {
-    "url": "https://github.com/fisker/vite-plugin-image-squoosh/issues"
+    "url": "https://github.com/fisker/vite-plugin-image-minify/issues"
   },
-  "repository": "fisker/vite-plugin-image-squoosh",
-  "funding": "https://github.com/fisker/vite-plugin-image-squoosh?sponsor=1",
+  "repository": "fisker/vite-plugin-image-minify",
+  "funding": "https://github.com/fisker/vite-plugin-image-minify?sponsor=1",
   "license": "MIT",
   "author": {
     "name": "fisker Cheung",
