@@ -44,5 +44,19 @@ exports[`Main 1`] = `
       "size": "-1.93 MB (-1927535)",
     },
   },
+  {
+    "bundled": {
+      "name": "assets/test-B2O8Bsmy.svg",
+      "size": "41 B (41)",
+    },
+    "original": {
+      "name": "test.svg",
+      "size": "181 B (181)",
+    },
+    "saved": {
+      "percentage": "-77.35%",
+      "size": "-140 B (-140)",
+    },
+  },
 ]
 `;

@@ -17,6 +17,7 @@ async function runVite() {
     write: false,
     logLevel: 'warn',
     plugins: [vitePluginImageSquoosh()],
+    build: {assetsInlineLimit: 0},
   })
 
   const assets = buildResult.output
