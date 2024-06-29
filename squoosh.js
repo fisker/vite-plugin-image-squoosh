@@ -4,7 +4,7 @@ import url from 'node:url'
 import os from 'node:os'
 import fs from 'node:fs/promises'
 
-const LIB_SQUOOSH_HACK_CODE = 'var fetch = undefined;\n'
+const LIB_SQUOOSH_HACK_CODE = 'var fetch;\n'
 
 async function importLibrarySquoosh() {
   const libsquooshEntry = module
