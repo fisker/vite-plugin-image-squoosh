@@ -33,13 +33,23 @@ function getEncoder(filename) {
  * @param {{content: Buffer, name: string}[]} files
  * @returns {}
  */
-async function squooshImages(files) {
+async function squooshImages(files, cache) {
   if (files.length === 0) {
     return []
   }
 
-  const {ImagePool} = await importLibrarySquoosh()
-  const imagePool = new ImagePool(os.cpus().length)
+  let imagePoolLoadPromise
+  let imagePool
+
+  function getImagePool() {
+    imagePoolLoadPromise ??= (async () => {
+      const {ImagePool} = await importLibrarySquoosh()
+      imagePool = new ImagePool(os.cpus().length)
+      return imagePool
+    })()
+
+    return imagePoolLoadPromise
+  }
 
   let result
 
@@ -50,15 +60,25 @@ async function squooshImages(files) {
         if (!encoder) {
           return original
         }
+
+        const cached = cache.getCachedData(original)
+
+        if (cached) {
+          return cached
+        }
+
+        const imagePool = await getImagePool()
         const image = imagePool.ingestImage(original)
         await image.encode({[encoder]: {}})
         const result = await image.encodedWith[encoder]
         const compressed = result.binary
-        return compressed.length < original.length ? compressed : original
+        const data = compressed.length < original.length ? compressed : original
+
+        return data
       }),
     )
   } finally {
-    imagePool.close()
+    imagePool?.close()
   }
 
   return result
