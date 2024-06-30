@@ -2,6 +2,15 @@
   "name": "vite-plugin-image-minify",
   "version": "0.0.2",
   "description": "Vite plugin to minify images.",
+  "keywords": [
+    "vite-plugin",
+    "Vite",
+    "Image",
+    "Minify",
+    "Minifier",
+    "squoosh",
+    "svgo"
+  ],
   "homepage": "https://github.com/fisker/vite-plugin-image-minify#readme",
   "bugs": {
     "url": "https://github.com/fisker/vite-plugin-image-minify/issues"
@@ -19,6 +28,8 @@
   "exports": "./index.js",
   "files": [
     "index.js",
+    "package-json-proxy.cjs",
+    "cache.js",
     "squoosh.js",
     "svgo.js"
   ],
@@ -44,7 +55,8 @@
   },
   "dependencies": {
     "@frostoven/libsquoosh": "^0.4.8",
-    "svgo": "^3.3.2"
+    "svgo": "^3.3.2",
+    "temp-dir": "3.0.0"
   },
   "devDependencies": {
     "@fisker/eslint-config": "13.1.0",
