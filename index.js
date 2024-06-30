@@ -45,7 +45,8 @@ async function minifySvg(bundle, cache) {
   }
 }
 
-function createVitePluginImageMinify() {
+function createVitePluginImageMinify(options) {
+  const cacheEnabled = options?.__test_enable_cache !== false
   let root
 
   /**
@@ -62,7 +63,13 @@ function createVitePluginImageMinify() {
         assert.equal(fileName, assetOrChunk.fileName, 'Unexpected asset')
       }
 
-      const cache = new Cache(root)
+      const cache = cacheEnabled
+        ? new Cache(root)
+        : {
+            getCachedData() {},
+            updateCache() {},
+            writeFile() {},
+          }
       await minifyWithSquoosh(bundle, cache)
       await minifySvg(bundle, cache)
 
