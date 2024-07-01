@@ -3,9 +3,27 @@ import * as path from 'node:path'
 import crypto from 'node:crypto'
 import packageJson from './package-json-proxy.cjs'
 import temporaryDirectory from 'temp-dir'
+import iterateDirectoryUp from 'iterate-directory-up'
 
 function hash(data) {
   return crypto.createHash('sha1').update(data).digest('hex')
+}
+
+function getCacheDirectory(startDirectory) {
+  for (const directory of iterateDirectoryUp(startDirectory)) {
+    if (fs.existsSync(path.join(directory, 'node_modules'))) {
+      return path.join(directory, `node_modules/.cache/${packageJson.name}/`)
+    }
+
+    if (fs.existsSync(path.join(directory, '.git'))) {
+      break
+    }
+  }
+
+  return path.join(
+    temporaryDirectory,
+    `${packageJson.name}/${hash(startDirectory)}/`,
+  )
 }
 
 class Cache {
@@ -19,23 +37,12 @@ class Cache {
 
   #updated = new Map()
 
-  constructor(root) {
-    this.#root = root
+  constructor(viteConfig) {
+    this.#root = viteConfig.root
 
-    let cacheDirectory
-    if (fs.existsSync(path.join(root, 'node_modules'))) {
-      cacheDirectory = path.join(
-        root,
-        `node_modules/${packageJson.name}-cache/`,
-      )
-    } else {
-      cacheDirectory = path.join(
-        temporaryDirectory,
-        `${packageJson.name}-cache/${hash(root)}/`,
-      )
-    }
-
-    this.#cacheDirectory = cacheDirectory
+    this.#cacheDirectory = viteConfig.cacheDir
+      ? path.join(packageJson.name)
+      : getCacheDirectory(viteConfig.root)
 
     this.#metaFile = path.join(this.#cacheDirectory, 'meta.json')
 

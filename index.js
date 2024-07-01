@@ -47,7 +47,7 @@ async function minifySvg(bundle, cache) {
 
 function createVitePluginImageMinify(options) {
   const cacheEnabled = options?.__test_enable_cache !== false
-  let root
+  let viteConfig
 
   /**
    * @type {import('vite').Plugin}
@@ -55,8 +55,8 @@ function createVitePluginImageMinify(options) {
   return {
     name: packageJson.name,
     apply: 'build',
-    config(config) {
-      ;({root} = config)
+    configResolved(config) {
+      viteConfig = config
     },
     async generateBundle(options, bundle) {
       for (const [fileName, assetOrChunk] of Object.entries(bundle)) {
@@ -64,7 +64,7 @@ function createVitePluginImageMinify(options) {
       }
 
       const cache = cacheEnabled
-        ? new Cache(root)
+        ? new Cache(viteConfig)
         : {
             getCachedData() {},
             updateCache() {},
