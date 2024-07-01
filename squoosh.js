@@ -23,14 +23,14 @@ const encoders = new Map([
   ['.jpg', {id: 'mozjpeg'}],
   ['.jpeg', {id: 'mozjpeg'}],
   ['.webp', {id: 'webp'}],
-  // ['.avif', {id:'avif'],
-  [
-    '.jxl',
-    {
-      id: 'jxl',
-      options: {effort: 7, photonNoiseIso: 0, lossyModular: true},
-    },
-  ],
+  // ['.avif', {id: 'avif'}],
+  // [
+  //   '.jxl',
+  //   {
+  //     id: 'jxl',
+  //     options: {effort: 7, photonNoiseIso: 0, lossyModular: false},
+  //   },
+  // ],
   // ['.wp2', {id:'wp2'}],
   ['.png', {id: 'oxipng'}],
 ])
