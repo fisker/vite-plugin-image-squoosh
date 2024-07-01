@@ -31,7 +31,7 @@ function getEncoder(filename) {
 
 /**
  * @param {{content: Buffer, name: string}[]} files
- * @returns {}
+ * @returns {Uint8Array[]}
  */
 async function squooshImages(files, cache) {
   if (files.length === 0) {
