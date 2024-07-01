@@ -70,17 +70,32 @@ class Cache {
   }
 
   getCachedData(content) {
-    if (!this.#files) return
+    if (this.#files.size === 0 && this.#updated.size === 0) {
+      return
+    }
 
     const contentHash = hash(content)
+
+    if (this.#updated.has(contentHash)) {
+      return this.#updated.get(contentHash)
+    }
 
     if (!this.#files.has(contentHash)) {
       return
     }
 
+    let data
     try {
-      return fs.readFileSync(path.join(this.#cacheDirectory, contentHash))
+      data = fs.readFileSync(path.join(this.#cacheDirectory, contentHash))
     } catch {}
+
+    if (!data) {
+      return
+    }
+
+    this.#updated.set(contentHash, data)
+
+    return data
   }
 
   updateCache(content, data) {
