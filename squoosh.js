@@ -20,13 +20,19 @@ async function importLibrarySquoosh() {
 }
 
 const encoders = new Map([
-  ['.jpg', 'mozjpeg'],
-  ['.jpeg', 'mozjpeg'],
-  ['.webp', 'webp'],
-  // ['.avif', 'avif'],
-  // ['.jxl', 'jxl'],
-  // ['.wp2', 'wp2'],
-  ['.png', 'oxipng'],
+  ['.jpg', {id: 'mozjpeg'}],
+  ['.jpeg', {id: 'mozjpeg'}],
+  ['.webp', {id: 'webp'}],
+  // ['.avif', {id:'avif'],
+  [
+    '.jxl',
+    {
+      id: 'jxl',
+      options: {effort: 7, photonNoiseIso: 0, lossyModular: true},
+    },
+  ],
+  // ['.wp2', {id:'wp2'}],
+  ['.png', {id: 'oxipng'}],
 ])
 
 function getEncoder(filename) {
@@ -73,8 +79,10 @@ async function squooshImages(files, cache) {
 
         const imagePool = await getImagePool()
         const image = imagePool.ingestImage(original)
-        await image.encode({[encoder]: undefined})
-        const result = await image.encodedWith[encoder]
+        await image.encode({
+          [encoder.id]: encoder.options,
+        })
+        const result = await image.encodedWith[encoder.id]
         const compressed = result.binary
         const data = compressed.length < original.length ? compressed : original
 

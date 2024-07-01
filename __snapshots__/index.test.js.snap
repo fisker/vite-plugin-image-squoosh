@@ -74,6 +74,20 @@ exports[`Main 1`] = `
   },
   {
     "bundled": {
+      "name": "assets/test-CHyExZGr.jxl",
+      "size": "151 B (151)",
+    },
+    "original": {
+      "name": "test.jxl",
+      "size": "151 B (151)",
+    },
+    "saved": {
+      "percentage": "0.00%",
+      "size": "0 B (0)",
+    },
+  },
+  {
+    "bundled": {
       "name": "assets/test-DBME9N5w.webp",
       "size": "2.05 kB (2050)",
     },
