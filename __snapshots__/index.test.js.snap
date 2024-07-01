@@ -58,5 +58,33 @@ exports[`Main 1`] = `
       "size": "-1.93 MB (-1927535)",
     },
   },
+  {
+    "bundled": {
+      "name": "assets/sofa_grid1x5_420-BqPuAwOk.avif",
+      "size": "25.4 kB (25409)",
+    },
+    "original": {
+      "name": "sofa_grid1x5_420.avif",
+      "size": "25.4 kB (25409)",
+    },
+    "saved": {
+      "percentage": "0.00%",
+      "size": "0 B (0)",
+    },
+  },
+  {
+    "bundled": {
+      "name": "assets/test-DBME9N5w.webp",
+      "size": "2.05 kB (2050)",
+    },
+    "original": {
+      "name": "test.webp",
+      "size": "4.88 kB (4880)",
+    },
+    "saved": {
+      "percentage": "-57.99%",
+      "size": "-2.83 kB (-2830)",
+    },
+  },
 ]
 `;
