@@ -9,8 +9,12 @@ function hash(data) {
   return crypto.createHash('sha1').update(data).digest('hex')
 }
 
-function getCacheDirectory(startDirectory) {
-  for (const directory of iterateDirectoryUp(startDirectory)) {
+function getCacheDirectory(viteConfig) {
+  if (viteConfig.cacheDir) {
+    return path.join(viteConfig.cacheDir, packageJson.name)
+  }
+
+  for (const directory of iterateDirectoryUp(viteConfig.root)) {
     if (fs.existsSync(path.join(directory, 'node_modules'))) {
       return path.join(directory, `node_modules/.cache/${packageJson.name}/`)
     }
@@ -22,7 +26,7 @@ function getCacheDirectory(startDirectory) {
 
   return path.join(
     temporaryDirectory,
-    `${packageJson.name}/${hash(startDirectory)}/`,
+    `${packageJson.name}/${hash(viteConfig.root)}/`,
   )
 }
 
@@ -40,9 +44,7 @@ class Cache {
   constructor(viteConfig) {
     this.#root = viteConfig.root
 
-    this.#cacheDirectory = viteConfig.cacheDir
-      ? path.join(packageJson.name)
-      : getCacheDirectory(viteConfig.root)
+    this.#cacheDirectory = getCacheDirectory(viteConfig)
 
     this.#metaFile = path.join(this.#cacheDirectory, 'meta.json')
 
