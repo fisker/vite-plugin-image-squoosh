@@ -3,6 +3,9 @@ import * as path from 'node:path'
 import url from 'node:url'
 import os from 'node:os'
 import fs from 'node:fs/promises'
+import isJpeg from 'is-jpg'
+import isWebp from 'is-webp'
+import isPng from 'is-png'
 
 const LIB_SQUOOSH_HACK_CODE = 'var fetch;'
 
@@ -20,9 +23,9 @@ async function importLibrarySquoosh() {
 }
 
 const encoders = new Map([
-  ['.jpg', {id: 'mozjpeg'}],
-  ['.jpeg', {id: 'mozjpeg'}],
-  ['.webp', {id: 'webp'}],
+  ['.jpg', {id: 'mozjpeg', test: isJpeg}],
+  ['.jpeg', {id: 'mozjpeg', test: isJpeg}],
+  ['.webp', {id: 'webp', test: isWebp}],
   // ['.avif', {id: 'avif'}],
   // [
   //   '.jxl',
@@ -32,7 +35,7 @@ const encoders = new Map([
   //   },
   // ],
   // ['.wp2', {id:'wp2'}],
-  ['.png', {id: 'oxipng'}],
+  ['.png', {id: 'oxipng', test: isPng}],
 ])
 
 function getEncoder(filename) {
@@ -43,7 +46,7 @@ function getEncoder(filename) {
  * @param {{content: Buffer, name: string}[]} files
  * @returns {Uint8Array[]}
  */
-async function squooshImages(files, cache) {
+async function squooshImages(files, {cache, onFileExtensionError}) {
   if (files.length === 0) {
     return []
   }
@@ -65,10 +68,14 @@ async function squooshImages(files, cache) {
 
   try {
     result = await Promise.all(
-      files.map(async ({content: original, name}) => {
+      files.map(async ({content: original, name, _image}) => {
         const encoder = getEncoder(name)
         if (!encoder) {
           return original
+        }
+
+        if (onFileExtensionError && !encoder.test(original)) {
+          onFileExtensionError(_image)
         }
 
         const cached = cache.getCachedData(original)

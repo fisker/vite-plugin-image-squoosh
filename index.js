@@ -4,19 +4,22 @@ import {isSupportedImage, squooshImages} from './squoosh.js'
 import optimizeSvg from './svgo.js'
 import Cache from './cache.js'
 import packageJson from './package-json-proxy.cjs'
+import isSvg from 'is-svg'
 
-async function minifyWithSquoosh(bundle, cache) {
-  const images = [
-    ...getAssets(bundle, (filename) => isSupportedImage(filename)),
-  ]
+async function minifyWithSquoosh(bundle, {onFileExtensionError, cache}) {
+  const images = getAssets(bundle, (filename) => isSupportedImage(filename))
 
   if (images.length === 0) {
     return
   }
 
   const compressedImages = await squooshImages(
-    images.map((image) => ({content: image.source, name: image.fileName})),
-    cache,
+    images.map((image) => ({
+      content: image.source,
+      name: image.fileName,
+      _image: image,
+    })),
+    {cache, onFileExtensionError},
   )
 
   for (const [index, image] of images.entries()) {
@@ -28,9 +31,13 @@ async function minifyWithSquoosh(bundle, cache) {
   }
 }
 
-async function minifySvg(bundle, cache) {
+async function minifySvg(bundle, {onFileExtensionError, cache}) {
   for (const image of getAssets(bundle, (filename) => isSvgFile(filename))) {
     const original = image.source
+    if (!isSvg(original)) {
+      onFileExtensionError?.(image)
+    }
+
     const compressed =
       cache.getCachedData(original) ?? optimizeSvg(original, {multipass: true})
 
@@ -41,6 +48,7 @@ async function minifySvg(bundle, cache) {
 
 function createVitePluginImageMinify(options) {
   const cacheEnabled = options?.__test_enable_cache !== false
+  const onFileExtensionError = options?.onFileExtensionError
   let viteConfig
 
   /**
@@ -60,8 +68,8 @@ function createVitePluginImageMinify(options) {
             updateCache() {},
             writeFile() {},
           }
-      await minifyWithSquoosh(bundle, cache)
-      await minifySvg(bundle, cache)
+      await minifyWithSquoosh(bundle, {onFileExtensionError, cache})
+      await minifySvg(bundle, {onFileExtensionError, cache})
 
       cache.writeFile()
     },
