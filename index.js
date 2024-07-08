@@ -37,12 +37,15 @@ async function minifyWithSquoosh(bundle, {onFileExtensionError, cache}) {
 async function minifySvg(bundle, {onFileExtensionError, cache}) {
   for (const image of getAssets(bundle, (filename) => isSvgFile(filename))) {
     const original = image.source
-    if (!isSvg(String(original))) {
-      onFileExtensionError?.(image)
-    }
 
-    const compressed =
-      cache.getCachedData(original) ?? optimizeSvg(original, {multipass: true})
+    let compressed = cache.getCachedData(original)
+    if (!compressed) {
+      if (onFileExtensionError && !isSvg(String(original))) {
+        onFileExtensionError(image)
+      }
+
+      compressed = optimizeSvg(original, {multipass: true})
+    }
 
     cache.updateCache(original, compressed)
     image.source = compressed
