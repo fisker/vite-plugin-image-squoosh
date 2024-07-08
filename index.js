@@ -1,5 +1,5 @@
+import * as path from 'node:path'
 import {getAssets, isSvgFile} from './utilities.js'
-
 import {isSupportedImage, squooshImages} from './squoosh.js'
 import optimizeSvg from './svgo.js'
 import Cache from './cache.js'
@@ -7,7 +7,10 @@ import packageJson from './package-json-proxy.cjs'
 import isSvg from 'is-svg'
 
 async function minifyWithSquoosh(bundle, {onFileExtensionError, cache}) {
-  const images = getAssets(bundle, (filename) => isSupportedImage(filename))
+  const images = [
+    // `getAssets` is a generator function
+    ...getAssets(bundle, (filename) => isSupportedImage(filename)),
+  ]
 
   if (images.length === 0) {
     return
@@ -34,7 +37,7 @@ async function minifyWithSquoosh(bundle, {onFileExtensionError, cache}) {
 async function minifySvg(bundle, {onFileExtensionError, cache}) {
   for (const image of getAssets(bundle, (filename) => isSvgFile(filename))) {
     const original = image.source
-    if (!isSvg(original)) {
+    if (!isSvg(String(original))) {
       onFileExtensionError?.(image)
     }
 
@@ -46,9 +49,37 @@ async function minifySvg(bundle, {onFileExtensionError, cache}) {
   }
 }
 
+const onFileExtensionErrorHandlers = new Map([
+  [
+    'warn',
+    (image) => {
+      console.warn(
+        `${image.name || image.fileName} is not a valid '${path.extname(image.fileName)}' file.`,
+      )
+    },
+  ],
+  [
+    'error',
+    (image) => {
+      throw new Error(
+        `${image.name || image.fileName} is not a valid '${path.extname(image.fileName)}' file.`,
+      )
+    },
+  ],
+])
+
 function createVitePluginImageMinify(options) {
   const cacheEnabled = options?.__test_enable_cache !== false
-  const onFileExtensionError = options?.onFileExtensionError
+  let onFileExtensionError = options?.onFileExtensionError
+
+  if (
+    typeof onFileExtensionError === 'string' &&
+    onFileExtensionErrorHandlers.has(onFileExtensionError)
+  ) {
+    onFileExtensionError =
+      onFileExtensionErrorHandlers.get(onFileExtensionError)
+  }
+
   let viteConfig
 
   /**
