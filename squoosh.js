@@ -97,7 +97,7 @@ async function squooshImages(files, {cache, onFileExtensionError}) {
       }),
     )
   } finally {
-    imagePool?.close()
+    await imagePool?.close()
   }
 
   return result
