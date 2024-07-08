@@ -54,7 +54,7 @@ const onFileExtensionErrorHandlers = new Map([
     'warn',
     (image) => {
       console.warn(
-        `${image.name || image.fileName} is not a valid '${path.extname(image.fileName)}' file.`,
+        `'${image.name || image.fileName}' is not a valid '${path.extname(image.fileName)}' file.`,
       )
     },
   ],
@@ -62,7 +62,7 @@ const onFileExtensionErrorHandlers = new Map([
     'error',
     (image) => {
       throw new Error(
-        `${image.name || image.fileName} is not a valid '${path.extname(image.fileName)}' file.`,
+        `'${image.name || image.fileName}' is not a valid '${path.extname(image.fileName)}' file.`,
       )
     },
   ],
